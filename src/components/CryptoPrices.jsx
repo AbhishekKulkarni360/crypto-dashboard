@@ -1,39 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-const COINS = ['bitcoin', 'ethereum', 'dogecoin'];
-
-const CryptoPrices = () => {
-  const [prices, setPrices] = useState({});
+const CryptoPrices = ({ coin = "bitcoin" }) => {
+  const [price, setPrice] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch prices from CoinGecko
-    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${COINS.join(',')}&vs_currencies=usd`)
-      .then(response => response.json())
-      .then(data => {
-        setPrices(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError('Failed to fetch prices');
+    setLoading(true);
+    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPrice(data[coin]?.usd ?? "N/A");
         setLoading(false);
       });
-  }, []);
+  }, [coin]);
 
-  if (loading) return <p>Loading crypto prices...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p>Loading price...</p>;
 
   return (
     <div>
-      <h2>Latest Crypto Prices</h2>
-      <ul>
-        {COINS.map(coin => (
-          <li key={coin}>
-            <strong>{coin[0].toUpperCase() + coin.slice(1)}:</strong> ${prices[coin]?.usd ?? 'N/A'}
-          </li>
-        ))}
-      </ul>
+      <h3>{coin.charAt(0).toUpperCase() + coin.slice(1)} Price:</h3>
+      <p>${price}</p>
     </div>
   );
 };
