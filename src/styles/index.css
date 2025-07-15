@@ -1,8 +1,28 @@
-body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background-color: #0d1117;
-  color: #e6edf3;
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(-45deg, #0d1117, #161b22, #0a0f1c, #10141a);
+  background-size: 400% 400%;
+  animation: animateBackground 15s ease infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes animateBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Center container */
@@ -73,12 +93,14 @@ p {
 .chart-card {
   width: 100%;
   box-sizing: border-box;
-  background-color: #161b22;
+  background-color: rgba(22, 27, 34, 0.9); /* semi-transparent for contrast */
+  backdrop-filter: blur(4px);             /* slight glassmorphism effect */
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
+
 
 /* Make chart adjust to screen size */
 .spinner {
@@ -130,4 +152,17 @@ p {
   filter: drop-shadow(0 0 4px #58a6ff);
   transition: transform 0.2s ease-in-out;
   transform: scale(1.1);
+}
+
+h1, h2, h3, p {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+
+.price-card p {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  margin-top: 0.5rem;
 }
