@@ -17,11 +17,11 @@ const CryptoPrices = ({ coin = "bitcoin" }) => {
   if (loading) return <p>Loading price...</p>;
 
   return (
-    <div>
-      <h3>{coin.charAt(0).toUpperCase() + coin.slice(1)} Price:</h3>
-      <p>${price}</p>
-    </div>
-  );
+  <div className="price-card">
+    <h3>{coin.charAt(0).toUpperCase() + coin.slice(1)} Price:</h3>
+    <p>${price}</p>
+  </div>
+);
 };
 
 export default CryptoPrices;

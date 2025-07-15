@@ -9,18 +9,15 @@ const CryptoSearch = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
-      <input
-        type="text"
-        placeholder="Search cryptocurrency (e.g. solana)"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        style={{ padding: "0.5rem", width: "220px" }}
-      />
-      <button type="submit" style={{ padding: "0.5rem 1rem", marginLeft: "1rem" }}>
-        Search
-      </button>
-    </form>
+    <form onSubmit={handleSubmit} className="search-bar">
+  <input
+    type="text"
+    placeholder="Search cryptocurrency (e.g. solana)"
+    value={query}
+    onChange={(e) => setQuery(e.target.value)}
+  />
+  <button type="submit">Search</button>
+</form>
   );
 };
 
