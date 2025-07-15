@@ -4,8 +4,10 @@ import '../styles/Navbar.css';
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <h1>Crypto Dashboard</h1>
-      <a href="#">Home</a>
+      <div className="navbar-container">
+        <h1>Crypto Dashboard</h1>
+        <a href="#">Home</a>
+      </div>
     </nav>
   );
 };
