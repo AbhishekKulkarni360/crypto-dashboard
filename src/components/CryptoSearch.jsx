@@ -1,66 +1,69 @@
-import React, { useEffect, useState } from "react";
-import '../styles/Search.css'; // Optional: create for dropdown styling
+import React, { useState, useEffect } from "react";
+import "../styles/Search.css";
 
 const CryptoSearch = ({ onSearch }) => {
-  const [query, setQuery] = useState("");
-  const [coinList, setCoinList] = useState([]);
-  const [filteredCoins, setFilteredCoins] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [coins, setCoins] = useState([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
 
   useEffect(() => {
-    // Fetch coin list once
-    fetch("https://api.coingecko.com/api/v3/coins/list")
-      .then(res => res.json())
-      .then(data => setCoinList(data));
+    const fetchCoins = async () => {
+      try {
+        const res = await fetch("https://api.coingecko.com/api/v3/coins/list");
+        const data = await res.json();
+        setCoins(data);
+      } catch (err) {
+        console.error("Failed to fetch coins list", err);
+      }
+    };
+
+    fetchCoins();
   }, []);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const value = e.target.value.toLowerCase();
-    setQuery(value);
+    setSearchTerm(value);
 
-    if (value.length > 0) {
-      const matches = coinList.filter(coin =>
-        coin.name.toLowerCase().includes(value) ||
-        coin.symbol.toLowerCase().includes(value)
-      ).slice(0, 10); // limit suggestions
-
-      setFilteredCoins(matches);
-    } else {
-      setFilteredCoins([]);
-    }
+    const suggestions = coins.filter((coin) =>
+      coin.name.toLowerCase().includes(value)
+    );
+    setFilteredSuggestions(suggestions.slice(0, 10)); // Limit to 10
   };
 
-  const handleSelect = (coinId) => {
-    setQuery("");
-    setFilteredCoins([]);
-    onSearch(coinId); // send to parent
+  const handleSelect = (id) => {
+    onSearch(id);
+    setSearchTerm("");
+    setFilteredSuggestions([]);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (query.trim()) {
-      onSearch(query.trim().toLowerCase());
-      setFilteredCoins([]);
+  const handleSearch = () => {
+    if (searchTerm.trim() !== "") {
+      const match = coins.find(
+        (coin) => coin.name.toLowerCase() === searchTerm.toLowerCase()
+      );
+      if (match) {
+        onSearch(match.id);
+      }
     }
   };
 
   return (
-    <div className="search-wrapper">
-      <form onSubmit={handleSubmit} className="search-bar">
+    <div className="search-bar-wrapper">
+      <div className="search-bar">
         <input
           type="text"
-          placeholder="Search cryptocurrency"
-          value={query}
-          onChange={handleChange}
-          autoComplete="off"
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder="Search coin..."
         />
-        <button type="submit">Search</button>
-      </form>
+        <button onClick={handleSearch}>Search</button>
+      </div>
 
-      {filteredCoins.length > 0 && (
-        <ul className="dropdown">
-          {filteredCoins.map((coin) => (
+      {filteredSuggestions.length > 0 && (
+        <ul className="suggestions">
+          {filteredSuggestions.map((coin) => (
             <li key={coin.id} onClick={() => handleSelect(coin.id)}>
-              {coin.name} ({coin.symbol.toUpperCase()})
+              {coin.name}
             </li>
           ))}
         </ul>
